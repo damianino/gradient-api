@@ -1,0 +1,436 @@
+openapi: 3.0.2
+info:
+  title: Gradient API
+  version: "1.0"
+servers:
+- url: http://localhost:3000/
+paths:
+  /:
+    get:
+      description: Get a random gradient
+      responses:
+        "200":
+          description: success
+          content:
+            image/png: {}
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_500'
+    post:
+      description: Get a gradient with specified parameters
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Gradient'
+      responses:
+        "200":
+          description: success
+          content:
+            image/png: {}
+  /register:
+    post:
+      description: Create a GradientAPI account to assemble your unique collection
+        of gradients
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/register_body'
+        required: true
+      responses:
+        "201":
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_201'
+        "422":
+          description: invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_422'
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_500'
+  /login:
+    post:
+      description: Login to GradientAPI
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/login_body'
+        required: true
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_201'
+        "401":
+          description: invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_422'
+        "422":
+          description: invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_422'
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_500'
+  /refresh:
+    post:
+      description: Refresh your access tokens before they expire!
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/refresh_body'
+        required: true
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_201'
+        "401":
+          description: invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_422'
+        "422":
+          description: invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_422'
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_500'
+      security:
+      - bearerAuth: []
+  /logout:
+    post:
+      description: Log out
+      responses:
+        "200":
+          description: you are logged out
+        "401":
+          description: invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_422'
+        "422":
+          description: invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_422'
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_500'
+      security:
+      - bearerAuth: []
+  /user/{username}:
+    get:
+      description: get gallery of
+      parameters:
+      - name: username
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: abc
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+        "401":
+          description: invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_422'
+        "422":
+          description: invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_422'
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_500'
+  /gradient:
+    post:
+      description: save gradient to your collection
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/gradient_body'
+      responses:
+        "200":
+          description: Gradient saved to your collection
+          content:
+            image/png: {}
+        "401":
+          description: invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_422'
+        "422":
+          description: invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_422'
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_500'
+      security:
+      - bearerAuth: []
+  /gradient/{id}:
+    get:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Image with given id
+          content:
+            image/png: {}
+        "401":
+          description: invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_422'
+        "422":
+          description: invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_422'
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_500'
+    delete:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: gradient successfully deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+        "401":
+          description: invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_422'
+        "422":
+          description: invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_422'
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_500'
+components:
+  schemas:
+    Color:
+      required:
+      - b
+      - g
+      - r
+      type: object
+      properties:
+        r:
+          maximum: 255
+          minimum: 0
+          type: integer
+        g:
+          maximum: 255
+          minimum: 0
+          type: integer
+        b:
+          maximum: 255
+          minimum: 0
+          type: integer
+        a:
+          maximum: 255
+          minimum: 0
+          type: integer
+      description: color data type
+    Gradient:
+      type: object
+      properties:
+        colors:
+          maxItems: 5
+          minItems: 2
+          type: array
+          items:
+            $ref: '#/components/schemas/Color'
+        x:
+          maximum: 4096
+          minimum: 64
+          type: number
+        "y":
+          maximum: 4096
+          minimum: 64
+          type: number
+      description: color data type
+    inline_response_500:
+      type: object
+      properties:
+        error:
+          type: string
+          example: server error
+    register_body:
+      type: object
+      properties:
+        username:
+          type: string
+          example: o111oo11o
+        password:
+          type: string
+    inline_response_201:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+      example:
+        accessToken: accessToken
+        refreshToken: refreshToken
+    inline_response_422:
+      type: object
+      properties:
+        error:
+          type: string
+    login_body:
+      type: object
+      properties:
+        username:
+          type: string
+          example: o111oo11o
+        password:
+          type: string
+    refresh_body:
+      type: object
+      properties:
+        refreshToken:
+          type: string
+    inline_response_200:
+      type: object
+      properties:
+        gradientList:
+          type: array
+          items: {}
+      example:
+        gradientList:
+        - ""
+        - ""
+    gradient_body:
+      required:
+      - name
+      type: object
+      properties:
+        gradient:
+          $ref: '#/components/schemas/Gradient'
+        name:
+          type: string
+    inline_response_200_1:
+      type: object
+      properties:
+        success:
+          type: string
+      example:
+        success: success
+  responses:
+    ServerError:
+      description: internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_response_500'
+    Unauthorized:
+      description: invalid credentials
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_response_422'
+    InvalidRequest:
+      description: invalid parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_response_422'
+    Tokens:
+      description: success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_response_201'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
